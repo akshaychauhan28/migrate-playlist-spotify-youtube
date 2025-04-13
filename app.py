@@ -14,7 +14,16 @@ app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Replace with a secure key
 
 # OAuth configuration
-CLIENT_SECRETS_FILE = "client_secret.json"
+import json
+
+client_secret_json = os.environ.get("GOOGLE_CLIENT_JSON")
+CLIENT_SECRETS_FILE = "temp_client_secret.json"
+
+# Write the environment variable content to a temporary JSON file
+if client_secret_json and not os.path.exists(CLIENT_SECRETS_FILE):
+    with open(CLIENT_SECRETS_FILE, "w") as f:
+        f.write(client_secret_json)
+
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
 
 @app.route("/", methods=["GET", "POST"])
